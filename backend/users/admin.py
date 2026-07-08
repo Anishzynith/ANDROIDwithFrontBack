@@ -11,7 +11,7 @@ class CustomUserAdmin(admin.ModelAdmin):
 
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'gender', 'blood_group', 'height_cm', 'weight_kg', 'updated_at')
+    list_display = ('user', 'gender', 'blood_group', 'height_cm','weight_kg','distance_unit', 'updated_at')
     list_filter = ('gender', 'blood_group', 'created_at')
     search_fields = ('user__email', 'user__username', 'user__phone_number')
 
@@ -25,8 +25,8 @@ class OTPAdmin(admin.ModelAdmin):
 
 @admin.register(PendingRegistration)
 class PendingRegistrationAdmin(admin.ModelAdmin):
-    list_display = ('email', 'username', 'created_at')
-    search_fields = ('email', 'username')
+    list_display = ('email', 'username', 'phone_number', 'created_at', 'updated_at')
+    search_fields = ('email', 'username', 'phone_number')
 
 
 @admin.register(SocialAccount)

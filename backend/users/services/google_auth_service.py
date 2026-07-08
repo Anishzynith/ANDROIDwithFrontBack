@@ -5,8 +5,8 @@ from google.auth.transport import requests
 from google.oauth2 import id_token
 from rest_framework import status
 
-from backend.core.constants import AuthProvider
-from backend.users.models import SocialAccount, UserProfile
+from core.constants import AuthProvider
+from users.models import SocialAccount, UserProfile
 from .auth_service import AuthService, AuthServiceError
 from .user_service import UserService
 

@@ -57,7 +57,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
     "rest_framework_simplejwt.token_blacklist",
-    "backend.users",
+    "users",
 ]
 
 MIDDLEWARE = [
@@ -143,6 +143,9 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+SERVE_MEDIA_FILES = _env_bool("SERVE_MEDIA_FILES", True)
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CORS_ALLOWED_ORIGINS = config(
@@ -189,6 +192,7 @@ SIMPLE_JWT = {
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True,
     "AUTH_HEADER_TYPES": ("Bearer",),
+    "LEEWAY": 10,
 }
 
 GOOGLE_OAUTH_CLIENT_ID = config("GOOGLE_OAUTH_ID", default="")

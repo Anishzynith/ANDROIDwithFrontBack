@@ -6,17 +6,17 @@ from django.db.models import Count
 from django.utils import timezone
 from rest_framework import status
 
-from backend.core.compatibility.legacy_otp_mapping import accepted_otp_purpose_values, normalize_otp_purpose
-from backend.core.constants import (
+from core.compatibility.legacy_otp_mapping import accepted_otp_purpose_values, normalize_otp_purpose
+from core.constants import (
     OTPPurpose,
     OTP_EXPIRY_SECONDS,
     OTP_MAX_REQUESTS_PER_HOUR,
     OTP_MAX_VERIFY_ATTEMPTS,
     OTP_RESEND_COOLDOWN_SECONDS,
 )
-from backend.core.services.email_service import EmailService
+from core.services.email_service import EmailService
 from .user_service import UserService
-from backend.users.models import OTP
+from users.models import OTP
 
 
 logger = logging.getLogger(__name__)

@@ -1,6 +1,6 @@
 from rest_framework.routers import DefaultRouter
 
-from backend.users.views import UserViewSet
+from users.views import UserViewSet
 
 
 router = DefaultRouter()

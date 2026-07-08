@@ -85,7 +85,6 @@ The API will be available at `http://localhost:8000`
 5. Add authorized redirect URIs:
    - `http://localhost:8000/`
    - `http://localhost:3000/`
-   - `exp://192.168.88.10:8081/--/auth/google`
 6. Copy Client ID and Client Secret to `.env`
 
 #### Apple OAuth Setup

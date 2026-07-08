@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-from backend.core.constants import AuthProvider, OTPPurpose, UserRole
+from core.constants import AuthProvider, OTPPurpose, UserRole
 
 
 # ---------------------- Base User ----------------------
@@ -52,13 +52,17 @@ class UserProfile(models.Model):
         O_POSITIVE = "O+", "O+"
         O_NEGATIVE = "O-", "O-"
 
+    class DistanceUnit(models.TextChoices):
+        KILOMETERS = "km", "Kilometers"
+        MILES = "mile", "Miles"
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name="profile")
     profile_picture = models.ImageField(upload_to=settings.USER_PROFILE_PICTURE_UPLOAD_TO, blank=True, null=True)
     date_of_birth = models.DateField(blank=True, null=True)
     gender = models.CharField(max_length=10, choices=Gender.choices, blank=True, null=True)
     blood_group = models.CharField(max_length=3, choices=BloodGroup.choices, blank=True, null=True)
-    height_cm = models.PositiveSmallIntegerField(blank=True, null=True)
-    weight_kg = models.PositiveSmallIntegerField(blank=True, null=True)
+    height_cm = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    weight_kg = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    distance_unit = models.CharField(max_length=4, choices=DistanceUnit.choices, default=DistanceUnit.KILOMETERS)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -78,6 +82,33 @@ class UserProfile(models.Model):
 
     class Meta:
         ordering = settings.USER_DEFAULT_ORDERING
+
+    @staticmethod
+    def miles_to_km(miles):
+        try:
+            return float(miles) * 1.609344
+        except Exception:
+            return None
+
+    @staticmethod
+    def km_to_miles(km):
+        try:
+            return float(km) / 1.609344
+        except Exception:
+            return None
+
+    def convert_distance_to_km(self, value, unit=None):
+        """Convert a distance value to kilometers based on unit ('km' or 'mile')."""
+        unit = unit or self.distance_unit
+        if value is None:
+            return None
+        try:
+            v = float(value)
+        except Exception:
+            return None
+        if unit == self.DistanceUnit.MILES:
+            return v * 1.609344
+        return v
 
 
 # ---------------------- OTP ----------------------
@@ -119,6 +150,7 @@ class PendingRegistration(models.Model):
     password_hash = models.CharField(max_length=settings.USER_PASSWORD_HASH_MAX_LENGTH)
     first_name = models.CharField(max_length=settings.USER_NAME_MAX_LENGTH, blank=True)
     last_name = models.CharField(max_length=settings.USER_NAME_MAX_LENGTH, blank=True)
+    phone_number = models.CharField(max_length=settings.USER_PHONE_MAX_LENGTH, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

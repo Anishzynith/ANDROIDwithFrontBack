@@ -11,8 +11,10 @@ urlpatterns = [
     path('resend-otp/',             UserViewSet.as_view({'post': 'resend_otp'})),
     path('google-login/',           UserViewSet.as_view({'post': 'google_login'})),
     path('password-reset/',         UserViewSet.as_view({'post': 'password_reset_request'})),
+    path('password-reset/verify/',  UserViewSet.as_view({'post': 'password_reset_verify'})),
     path('password-reset/confirm/', UserViewSet.as_view({'post': 'password_reset_confirm'})),
     path('profile/',                UserViewSet.as_view({'get':  'profile', 'patch': 'profile'})),
+    path('change-password/',        UserViewSet.as_view({'post': 'change_password'})),
     path('logout/',                 UserViewSet.as_view({'post': 'logout'})),
     path('admin-login/',            UserViewSet.as_view({'post': 'admin_login'})),
 ]

@@ -3,7 +3,7 @@ from django.contrib.auth.hashers import make_password
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from backend.users.models import CustomUser, OTP, PendingRegistration
+from users.models import CustomUser, OTP, PendingRegistration, UserProfile
 from .otp_service import OTPService, OTPServiceError
 from .user_service import UserService
 
@@ -27,7 +27,7 @@ class AuthService:
 
     @classmethod
     def auth_payload(cls, user):
-        from backend.users.serializers import CustomUserSerializer
+        from users.serializers import CustomUserSerializer
 
         tokens = cls.token_payload(user)
         return {"user": CustomUserSerializer(user).data, "tokens": tokens, "token": tokens["access"]}
@@ -41,6 +41,7 @@ class AuthService:
                 "password_hash": make_password(data["password"]),
                 "first_name": data.get("first_name", ""),
                 "last_name": data.get("last_name", ""),
+                "phone_number": data.get("phone_number"),
             },
         )
         otp, metadata = OTPService.send_otp(data["email"], OTP.PURPOSE_REGISTER)
@@ -72,10 +73,12 @@ class AuthService:
             username=pending.username,
             first_name=pending.first_name,
             last_name=pending.last_name,
+            phone_number=pending.phone_number,
             is_email_verified=True,
         )
         user.password = pending.password_hash
         user.save()
+        profile, _ = UserProfile.objects.get_or_create(user=user)
         OTPService.mark_used(otp)
         pending.delete()
         return cls.auth_payload(user)

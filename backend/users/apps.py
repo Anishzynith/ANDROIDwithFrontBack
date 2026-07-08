@@ -3,7 +3,7 @@ from django.apps import AppConfig
 
 class UsersConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'backend.users'
+    name = 'users'
 
     def ready(self):
-        from . import signals  # noqa: F401
+        import users.signals  # noqa: F401
